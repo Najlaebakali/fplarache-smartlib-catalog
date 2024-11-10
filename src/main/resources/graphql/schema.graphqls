@@ -6,6 +6,7 @@ type Livre {
     description: String
     datePublication: String
     isbn: String
+    status: String
 }
 
 type Query {
@@ -18,7 +19,7 @@ type Query {
 }
 
 type Mutation {
-    saveLivre(titre: String!, auteur: String!, genre: String, description: String, datePublication: String, isbn: String): Livre
-    updateLivre(id: ID!, titre: String, auteur: String, genre: String, description: String, datePublication: String, isbn: String): Livre
+    saveLivre(titre: String!, auteur: String!, genre: String, description: String, datePublication: String, isbn: String, status: String): Livre
+    updateLivre(id: ID!, titre: String, auteur: String, genre: String, description: String, datePublication: String, isbn: String, status: String): Livre
     deleteLivre(id: ID!): String
 }
