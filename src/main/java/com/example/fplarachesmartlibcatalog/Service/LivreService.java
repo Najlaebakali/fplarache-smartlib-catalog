@@ -1,7 +1,7 @@
-package com.example.smartlibcatalog.Service;
+package com.example.fplarachesmartlibcatalog.Service;
 
-import com.example.smartlibcatalog.Entity.Livre;
-import com.example.smartlibcatalog.Repository.LivreRepository;
+import com.example.fplarachesmartlibcatalog.Entity.Livre;
+import com.example.fplarachesmartlibcatalog.Repository.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

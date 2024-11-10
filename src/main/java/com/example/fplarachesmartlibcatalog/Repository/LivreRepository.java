@@ -1,6 +1,6 @@
-package com.example.smartlibcatalog.Repository;
+package com.example.fplarachesmartlibcatalog.Repository;
 
-import com.example.smartlibcatalog.Entity.Livre;
+import com.example.fplarachesmartlibcatalog.Entity.Livre;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>smartlib-catalog</artifactId>
+    <artifactId>fplarache-smartlib-catalog</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>smartlib-catalog</name>
-    <description>smartlib-catalog</description>
+    <name>fplarache-smartlib-catalog</name>
+    <description>fplarache-smartlib-catalog</description>
     <url/>
     <licenses>
         <license/>
@@ -96,7 +96,7 @@
                             <schemaPaths>
                                 <param>src/main/resources/graphql-client</param>
                             </schemaPaths>
-                            <packageName>com.example.smartlibcatalog.codegen</packageName>
+                            <packageName>com.example.fplarache-smartlib-catalog.codegen</packageName>
                             <addGeneratedAnnotation>true</addGeneratedAnnotation>
                         </configuration>
                     </execution>

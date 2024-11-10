@@ -1,4 +1,4 @@
-package com.example.smartlibcatalog;
+package com.example.fplarachesmartlibcatalog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

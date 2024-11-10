@@ -1,7 +1,7 @@
-package com.example.smartlibcatalog.Resolver;
+package com.example.fplarachesmartlibcatalog.Resolver;
 
-import com.example.smartlibcatalog.Entity.Livre;
-import com.example.smartlibcatalog.Service.LivreService;
+import com.example.fplarachesmartlibcatalog.Entity.Livre;
+import com.example.fplarachesmartlibcatalog.Service.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;

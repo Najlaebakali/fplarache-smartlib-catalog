@@ -1,4 +1,4 @@
-package com.example.smartlibcatalog.Entity;
+package com.example.fplarachesmartlibcatalog.Entity;
 
 
 import jakarta.persistence.Entity;
