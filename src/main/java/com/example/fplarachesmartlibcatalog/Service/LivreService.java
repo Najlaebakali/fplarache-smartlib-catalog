@@ -15,7 +15,7 @@ public class LivreService {
     LivreRepository livreRepository;
 
     public Livre saveLivre(String titre, String auteur, String genre, String description,
-                           String datePublication, String isbn) {
+                           String datePublication, String isbn, String status) {
         // Convertir datePublication en LocalDateTime
         LocalDateTime date = LocalDateTime.parse(datePublication);
 
@@ -26,12 +26,13 @@ public class LivreService {
         livre.setDescription(description);
         livre.setDatePublication(date);
         livre.setIsbn(isbn);
+        livre.setStatus(status);
 
         return livreRepository.save(livre);
     }
 
     public Livre updateLivre(Long id, String titre, String auteur, String genre,
-                             String description, String datePublication, String isbn) {
+                             String description, String datePublication, String isbn, String status) {
         Livre livre = livreRepository.findById(id).orElseThrow(() -> new RuntimeException("Livre non trouvé"));
         livre.setTitre(titre);
         livre.setAuteur(auteur);
@@ -39,6 +40,7 @@ public class LivreService {
         livre.setDescription(description);
         livre.setDatePublication(LocalDateTime.parse(datePublication));
         livre.setIsbn(isbn);
+        livre.setStatus(status);
         return livreRepository.save(livre);
     }
 
@@ -61,4 +63,10 @@ public class LivreService {
     public List<Livre> filterByGenreAndAuthor(String genre, String author) {
         return livreRepository.findByGenreOrAuteur(genre, author);
     }
+
+    // Méthode pour récupérer les livres selon leur statut temporairement pour simuler le statut des livres, en attendant la communication avec le service "empreint".
+    public List<Livre> getLivresByStatus(String status) {
+        return livreRepository.findByStatus(status);
+    }
+
 }

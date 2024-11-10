@@ -37,6 +37,11 @@ public class LivreResolver {
         return livreService.filterByGenreAndAuthor(genre, author);
     }
 
+    @QueryMapping
+    public List<Livre> getLivresByStatus(@Argument String status) {
+        return livreService.getLivresByStatus(status);
+    }
+
     // Mutations
     @MutationMapping
     public Livre saveLivre(
@@ -45,17 +50,18 @@ public class LivreResolver {
             @Argument String genre,
             @Argument String description,
             @Argument String datePublication,
-            @Argument String isbn
+            @Argument String isbn,
+            @Argument String status
     ) {
-        return livreService.saveLivre(titre, auteur, genre, description, datePublication, isbn);
+        return livreService.saveLivre(titre, auteur, genre, description, datePublication, isbn, status);
     }
 
     @MutationMapping
     public Livre updateLivre(@Argument Long id, @Argument String titre,
                              @Argument String auteur, @Argument String genre,
                              @Argument String description, @Argument String datePublication,
-                             @Argument String isbn) {
-        return livreService.updateLivre(id, titre, auteur, genre, description, datePublication, isbn);
+                             @Argument String isbn, @Argument String status) {
+        return livreService.updateLivre(id, titre, auteur, genre, description, datePublication, isbn, status);
     }
 
     @MutationMapping

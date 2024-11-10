@@ -28,6 +28,8 @@ public class Livre {
 
     private LocalDateTime datePublication;
     private String isbn;
+    // The status can be "disponible" or "empreint"
+    private String status;
 
 
 
