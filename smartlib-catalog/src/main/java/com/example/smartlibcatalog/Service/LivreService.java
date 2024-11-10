@@ -5,6 +5,7 @@ import com.example.smartlibcatalog.Repository.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -13,37 +14,45 @@ public class LivreService {
     @Autowired
     LivreRepository livreRepository;
 
-    public Livre save(Livre livre) {
+    public Livre saveLivre(String titre, String auteur, String genre, String description,
+                           String datePublication, String isbn) {
+        // Convertir datePublication en LocalDateTime
+        LocalDateTime date = LocalDateTime.parse(datePublication);
+
+        Livre livre = new Livre();
+        livre.setTitre(titre);
+        livre.setAuteur(auteur);
+        livre.setGenre(genre);
+        livre.setDescription(description);
+        livre.setDatePublication(date);
+        livre.setIsbn(isbn);
+
         return livreRepository.save(livre);
     }
 
-
-    public List<Livre> getAll() {
-        return livreRepository.findAll();
+    public Livre updateLivre(Long id, String titre, String auteur, String genre,
+                             String description, String datePublication, String isbn) {
+        Livre livre = livreRepository.findById(id).orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+        livre.setTitre(titre);
+        livre.setAuteur(auteur);
+        livre.setGenre(genre);
+        livre.setDescription(description);
+        livre.setDatePublication(LocalDateTime.parse(datePublication));
+        livre.setIsbn(isbn);
+        return livreRepository.save(livre);
     }
 
     public Livre getByid(Long id) {
         return livreRepository.getById(id);
     }
 
+    public List<Livre> getAll() {
+        return livreRepository.findAll();
+    }
+
     public void delete(Long id) {
         livreRepository.deleteById(id);
     }
-
-
-    public Livre update(Long id, Livre livre) {
-        return livreRepository.findById(id).map(livre1 -> {
-            livre1.setTitre(livre.getTitre());
-            livre1.setAuteur(livre.getAuteur());
-            livre1.setDescription(livre.getDescription());
-            livre1.setGenre(livre.getGenre());
-            livre1.setIsbn(livre.getIsbn());
-            livre1.setDatePublication(livre.getDatePublication());
-            return livreRepository.save(livre1);
-        }).orElseThrow(() -> new RuntimeException("Livre nest pas trouve !!!"));
-
-    }
-
 
     public List<Livre> searchByTitle(String title) {
         return livreRepository.findByTitreContainingIgnoreCase(title);

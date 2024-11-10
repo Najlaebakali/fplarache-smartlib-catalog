@@ -8,7 +8,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -48,31 +47,15 @@ public class LivreResolver {
             @Argument String datePublication,
             @Argument String isbn
     ) {
-        // Convertir datePublication en LocalDateTime
-        LocalDateTime date = LocalDateTime.parse(datePublication);
-
-        Livre livre = new Livre();
-        livre.setTitre(titre);
-        livre.setAuteur(auteur);
-        livre.setGenre(genre);
-        livre.setDescription(description);
-        livre.setDatePublication(date);
-        livre.setIsbn(isbn);
-
-        // L'ID sera généré automatiquement par la base de données
-        return livreService.save(livre);
+        return livreService.saveLivre(titre, auteur, genre, description, datePublication, isbn);
     }
 
     @MutationMapping
-    public Livre updateLivre(@Argument Long id, @Argument String titre,@Argument String auteur, @Argument String genre, @Argument String description, @Argument String datePublication, @Argument String isbn) {
-        Livre livre = new Livre();
-        livre.setTitre(titre);
-        livre.setAuteur(auteur);
-        livre.setGenre(genre);
-        livre.setDescription(description);
-        livre.setDatePublication(LocalDateTime.parse(datePublication));
-        livre.setIsbn(isbn);
-        return livreService.update(id, livre);
+    public Livre updateLivre(@Argument Long id, @Argument String titre,
+                             @Argument String auteur, @Argument String genre,
+                             @Argument String description, @Argument String datePublication,
+                             @Argument String isbn) {
+        return livreService.updateLivre(id, titre, auteur, genre, description, datePublication, isbn);
     }
 
     @MutationMapping
