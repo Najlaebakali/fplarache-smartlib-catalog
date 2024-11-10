@@ -11,9 +11,9 @@ services:
 
 
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/SmartLib
+     # - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/SmartLib
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://smartlib-1.crqkcw4gkx25.eu-north-1.rds.amazonaws.com:5432/smartlib
       - SPRING_DATASOURCE_USERNAME=postgres
-
       - SPRING_DATASOURCE_PASSWORD=smartlib
 
     depends_on:
@@ -24,9 +24,8 @@ services:
   db:
     image: postgres:latest
     environment:
-      - POSTGRES_DB=SmartLib
+      - POSTGRES_DB=smartlib
       - POSTGRES_USER=postgres
-
       - POSTGRES_PASSWORD=smartlib
     ports:
       - "5433:5432"
