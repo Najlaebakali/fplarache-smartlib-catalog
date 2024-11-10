@@ -1,0 +1,33 @@
+
+version: '3.8'
+
+services:
+  smartlib_catalog:
+    build: .
+    ports:
+      - "8081:8081"
+
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/SmartLib
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres_password_2023
+    depends_on:
+      - db
+    networks:
+      - smartlib-network
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=SmartLib
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres_password_2023
+    ports:
+      - "5432:5432"
+    networks:
+      - smartlib-network
+
+networks:
+  smartlib-network:
+    driver: bridge
