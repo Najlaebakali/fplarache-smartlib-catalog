@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@yu_tou/swagger-to-graphql": "^4.0.3",
+    "express": "^4.21.1",
+    "graphql-to-openapi": "^4.0.23",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
