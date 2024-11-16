@@ -105,7 +105,8 @@ jobs:
           dockerfile: ./Dockerfile   # ajuster le chemin de dockerfile
           cmd: "java -jar /app.jar" 
           image-short-name: dev-fplarache-smartlib-catalog-repo
-          image-prefix: ${{ steps.vars.outputs.fullServiceName }}
+          #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
+          image-prefix: ""
           image-tag: latest # Utilisation de 'latest' pour la version par défaut
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
 
