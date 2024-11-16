@@ -90,6 +90,9 @@ jobs:
       - name: Build and package Java application
         run: |
           mvn clean install -DskipTests
+      # Vérification du fichier .jar généré
+      - name: List target directory contents
+        run: ls -la target/
 
       ###############################
       # WebAPI
