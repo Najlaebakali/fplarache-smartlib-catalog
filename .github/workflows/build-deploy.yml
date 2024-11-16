@@ -92,10 +92,8 @@ jobs:
 
       - name: Afficher l'emplacement du fichier JAR
         run: |
-          echo "Voici le contenu du répertoire target :"
-          ls -alh ../../target/  # Affiche tous les fichiers dans le répertoire target
-          echo "Vérification spécifique de app.jar :"
-          ls -alh ../../target/app.jar  # Vérifie si app.jar existe
+           ls -alh target/  # Vérifie l'existence de app.jar
+           test -f target/app.jar || (echo "Error: app.jar not found" && exit 1)
       ###############################
       # Catalog
       ###############################
@@ -107,8 +105,8 @@ jobs:
         with:
           maven-environment: ${{ steps.vars.outputs.environment }}
           #spring-profile: ${{ steps.vars.outputs.springProfile }}
-          published-app: ../../target/app.jar
-          dockerfile: ./Dockerfile   # ajuster le chemin de dockerfile
+          published-app: target/app.jar
+          dockerfile: Dockerfile   # ajuster le chemin de dockerfile
           cmd: "java -jar /app.jar" 
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
@@ -117,7 +115,7 @@ jobs:
           #image-tag: latest # Utilisation de 'latest' pour la version par défaut
           image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
-          JAVA_APP_PATH: ../../target/app.jar
+          JAVA_APP_PATH: target/app.jar
 
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
