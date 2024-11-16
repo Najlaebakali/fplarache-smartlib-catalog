@@ -55,7 +55,6 @@ runs:
         # Build the Docker image
         docker build \
           --build-arg JAVA_API_PATH_ARG=${{ inputs.published-app }} \
-          --build-arg JAVA_API_CMD_ARG=${{ inputs.cmd }} \
           --build-arg JAVA_ENVIRONMENT_ARG=${{ inputs.java-environment }} \
           -f ${{ inputs.dockerfile }} \
           -t $IMAGENAME .
