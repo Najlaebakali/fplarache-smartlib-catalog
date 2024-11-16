@@ -90,12 +90,13 @@ jobs:
       - name: Build and package Java application
         run: |
           mvn clean install -DskipTests
+
       # Vérification du fichier .jar généré
       - name: List target directory contents
         run: ls -la target/
+
       - name: Rename generated JAR
         run: mv target/*.jar target/app.jar
-
 
       ###############################
       # WebAPI
@@ -108,11 +109,11 @@ jobs:
         with:
           spring-profile: ${{ steps.vars.outputs.springProfile }}
           published-app: ./target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
-          dockerfile: ./Dockerfile   # ajuster le chemin de dockerfile
-          cmd: "java -jar /app.jar" 
+          dockerfile: ./Dockerfile   # ajuster le chemin du Dockerfile
+          cmd: "java -jar /app.jar"
           image-short-name: dev-fplarache-smartlib-catalog-repo
-          #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
-          #image-prefix: ""
+          # image-prefix: ${{ steps.vars.outputs.fullServiceName }}
+          image-prefix: ""
           image-tag: latest # Utilisation de 'latest' pour la version par défaut
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
           JAVA_APP_PATH: ./target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
@@ -120,8 +121,10 @@ jobs:
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
         run: |
-          docker tag dev-fplarache-smartlib-catalog-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
-          docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+          IMAGENAME="${{ steps.login-ecr.outputs.registry }}/dev-fplarache-smartlib-catalog-repo:latest"
+          docker tag dev-fplarache-smartlib-catalog-repo:latest $IMAGENAME
+          docker push $IMAGENAME
+          echo "Image pushed: $IMAGENAME"
 
       # Étape 12 : Déployer WebAPI sur ECS
       - name: Deploy ECS - WebApi
@@ -129,6 +132,12 @@ jobs:
           ECS_CLUSTER: ${{ steps.vars.outputs.fullServiceName }}-fgcluster
           ECS_SERVICE: ${{ steps.vars.outputs.fullServiceName }}-fgservice
         run: |
+          echo "Deploying service to ECS..."
           TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
-          TASK_ARN="$(printf '%s' "${TASK_JSON}"|jq -r '.service.deployments[0].id')"
+          if [[ $? -ne 0 ]]; then
+            echo "Error during ECS deployment. Check the logs for more details."
+            exit 1
+          fi
+          TASK_ARN="$(printf '%s' "${TASK_JSON}" | jq -r '.service.deployments[0].id')"
+          echo "Deployment ARN: $TASK_ARN"
           echo "deployment-arn=$TASK_ARN" >> $GITHUB_OUTPUT
