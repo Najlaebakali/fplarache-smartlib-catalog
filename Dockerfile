@@ -5,4 +5,4 @@ VOLUME /tmp
 COPY target/*.jar app.jar
 # Exposer le port sur lequel l'application va tourner
 ENTRYPOINT ["java", "-jar", "/app.jar"]
-EXPOSE 8081
+EXPOSE 80
