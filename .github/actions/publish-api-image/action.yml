@@ -18,7 +18,7 @@ inputs:
     default: 'fplarache-smartlib-catalog'
   image-prefix:
     description: 'Prefix for the Docker image name (ensure no leading dash)'
-    default: 'dev'  # Remove the leading dash here if present
+    default: 'dev'
   image-tag:
     description: 'Tag for the Docker image (e.g., v1.0.0)'
     default: 'latest'
@@ -41,26 +41,55 @@ runs:
         IMAGE_SHORT_NAME="${{ inputs.image-short-name }}"
         IMAGE_TAG="${{ inputs.image-tag }}"
         ECR_REGISTRY="${{ inputs.ecr-registry }}"
+        JAVA_APP_PATH="${{ inputs.published-app }}"
+        DOCKERFILE_PATH="${{ inputs.dockerfile }}"
+        JAVA_ENVIRONMENT="${{ inputs.java-environment }}"
 
-        # Ensure the image name is correctly formatted
+        # Step 1: Validate inputs
+        if [[ -z "$IMAGE_PREFIX" ]]; then
+          echo "Error: IMAGE_PREFIX is not set or empty"
+          exit 1
+        fi
+        if [[ -z "$IMAGE_SHORT_NAME" ]]; then
+          echo "Error: IMAGE_SHORT_NAME is not set or empty"
+          exit 1
+        fi
+        if [[ -z "$IMAGE_TAG" ]]; then
+          echo "Error: IMAGE_TAG is not set or empty"
+          exit 1
+        fi
+        if [[ -z "$ECR_REGISTRY" ]]; then
+          echo "Error: ECR_REGISTRY is not set or empty"
+          exit 1
+        fi
+        if [[ -z "$JAVA_APP_PATH" || ! -f "$JAVA_APP_PATH" ]]; then
+          echo "Error: JAVA_APP_PATH is not set or does not point to a valid file"
+          exit 1
+        fi
+        if [[ -z "$DOCKERFILE_PATH" || ! -f "$DOCKERFILE_PATH" ]]; then
+          echo "Error: DOCKERFILE_PATH is not set or does not point to a valid file"
+          exit 1
+        fi
+
+        # Step 2: Ensure the image name is correctly formatted
         # Remove leading hyphen from the image prefix, if exists
         IMAGE_PREFIX=$(echo $IMAGE_PREFIX | sed 's/^-//')
 
-        # Construct the full image name
+        # Step 3: Construct the full image name
         IMAGENAME="${ECR_REGISTRY}/${IMAGE_PREFIX}-${IMAGE_SHORT_NAME}:${IMAGE_TAG}"
 
-        # Display the formatted image name
+        # Step 4: Display the formatted image name
         echo "Formatted image name: $IMAGENAME"
 
-        # Build the Docker image
+        # Step 5: Build the Docker image
         docker build \
-          --build-arg JAVA_API_PATH_ARG=${{ inputs.published-app }} \
-          --build-arg JAVA_ENVIRONMENT_ARG=${{ inputs.java-environment }} \
-          -f ${{ inputs.dockerfile }} \
+          --build-arg JAVA_API_PATH_ARG=$JAVA_APP_PATH \
+          --build-arg JAVA_ENVIRONMENT_ARG=$JAVA_ENVIRONMENT \
+          -f $DOCKERFILE_PATH \
           -t $IMAGENAME .
 
-        # Push the image with the tag only once (without duplicating the tag)
+        # Step 6: Push the Docker image
         docker push $IMAGENAME
 
-        # Output the image URI
+        # Step 7: Output the image URI
         echo "image-uri=$IMAGENAME" >> $GITHUB_OUTPUT
