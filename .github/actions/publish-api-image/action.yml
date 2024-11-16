@@ -59,12 +59,8 @@ runs:
           -f ${{ inputs.dockerfile }} \
           -t $IMAGENAME .
 
-        # Tag the image as 'latest'
-        docker image tag $IMAGENAME $IMAGENAME:latest
-
-        # Push the image with both tags
+        # Push the image with the tag only once (without duplicating the tag)
         docker push $IMAGENAME
-        docker push $IMAGENAME:latest
 
         # Output the image URI
         echo "image-uri=$IMAGENAME" >> $GITHUB_OUTPUT
