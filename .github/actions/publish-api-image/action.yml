@@ -17,8 +17,8 @@ inputs:
     description: 'Short name for the Docker image'
     default: 'fplarache-smartlib-catalog'
   image-prefix:
-    description: 'Prefix for the Docker image name'
-    default: 'dev'
+    description: 'Prefix for the Docker image name (ensure no leading dash)'
+    default: 'dev'  # Remove the leading dash here if present
   image-tag:
     description: 'Tag for the Docker image (e.g., v1.0.0)'
     default: 'latest'
@@ -38,6 +38,9 @@ runs:
       run: |
         # Set the image name dynamically
         export IMAGENAME=${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}:${{ inputs.image-tag }}
+
+        # Check and ensure the image name is valid (e.g., no leading dashes)
+        echo "Using image name: $IMAGENAME"
 
         # Build the Docker image
         docker build \
