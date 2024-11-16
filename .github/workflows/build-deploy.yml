@@ -5,7 +5,7 @@ on:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+-dev"
       - "v[0-9]+.[0-9]+.[0-9]+-prod"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 env:
   BEFORE_SHA: ${{ github.event.before }}
@@ -104,13 +104,18 @@ jobs:
           published-app: webapi
           dockerfile: ./Dockerfile   # ajuster le chemin de dockerfile
           cmd: "java -jar /app.jar" 
-          image-short-name: repo
+          image-short-name: dev-fplarache-smartlib-catalog-repo
           image-prefix: ${{ steps.vars.outputs.fullServiceName }}
-          #image-tag: latest #juste pour tester
-          image-tag: ${{ github.sha }}
+          image-tag: latest # Utilisation de 'latest' pour la version par défaut
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
 
-      # Étape 11 : Déployer WebAPI sur ECS
+      # Étape 11 : Pusher l'image Docker vers ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker tag dev-fplarache-smartlib-catalog-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+          docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+
+      # Étape 12 : Déployer WebAPI sur ECS
       - name: Deploy ECS - WebApi
         env:
           ECS_CLUSTER: ${{ steps.vars.outputs.fullServiceName }}-fgcluster
