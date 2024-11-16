@@ -109,7 +109,7 @@ jobs:
           #image-prefix: ""
           image-tag: latest # Utilisation de 'latest' pour la version par défaut
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
-          JAVA_APP_PATH: ./target/webapi.jar  # Chemin vers l'artefact généré
+          JAVA_APP_PATH: ./target/app.jar
 
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
