@@ -90,7 +90,9 @@ jobs:
       - name: Build and package Java application
         run: mvn clean package -DskipTests
 
-
+      - name: Check if the app.jar file exists
+        run: |
+          ls -alh "../../target/app.jar"  # Verify the file exists
       ###############################
       # Catalog
       ###############################
