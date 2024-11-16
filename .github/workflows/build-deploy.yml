@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: '17'
 
       # Étape 3 : Extraire le nom de la branche
       - name: Extract branch name
