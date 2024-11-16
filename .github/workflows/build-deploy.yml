@@ -27,8 +27,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adoptopenjdk'
-          java-version: '17'
+          distribution: 'adopt'
+          java-version: '11'
 
       # Étape 3 : Extraire le nom de la branche
       - name: Extract branch name
