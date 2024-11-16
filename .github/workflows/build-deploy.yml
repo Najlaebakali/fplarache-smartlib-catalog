@@ -53,8 +53,8 @@ jobs:
         id: vars
         env:
           ENVIRONMENT: ${{ steps.split_pre.outputs._1 }}
-          APPLICATION: docscreen
-          SERVICE: webapi
+          APPLICATION: smartlib-catalog
+          SERVICE: catalog-service
         run: |
           echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
           echo "application=${APPLICATION}" >> $GITHUB_OUTPUT
@@ -63,12 +63,12 @@ jobs:
             echo "awsAccessKey=${{ secrets.DEV_ADMIN_AWS_ACCESS_KEY }}" >> $GITHUB_OUTPUT
             echo "awsSecretKey=${{ secrets.DEV_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
             echo "awsDefaultRegion=eu-west-1" >> $GITHUB_OUTPUT
-            echo "springProfile=dev" >> $GITHUB_OUTPUT
+            #echo "springProfile=dev" >> $GITHUB_OUTPUT
           elif [ "${ENVIRONMENT}" = "prod" ]; then
             echo "awsAccessKey=PROD_ADMIN_AWS_ACCESS_KEY" >> $GITHUB_OUTPUT
             echo "awsSecretKey=PROD_ADMIN_AWS_SECRET_KEY" >> $GITHUB_OUTPUT
             echo "awsDefaultRegion=eu-west-1" >> $GITHUB_OUTPUT
-            echo "springProfile=prod" >> $GITHUB_OUTPUT
+            #echo "springProfile=prod" >> $GITHUB_OUTPUT
           fi
           echo "fullServiceName=${ENVIRONMENT}-${APPLICATION}-${SERVICE}" >> $GITHUB_OUTPUT
 
@@ -98,7 +98,7 @@ jobs:
 
 
       ###############################
-      # WebAPI
+      # Catalog
       ###############################
 
       # Étape 10 : Construire l'image Docker pour WebAPI
@@ -106,16 +106,18 @@ jobs:
         id: publish-webapi-image
         uses: ./.github/actions/publish-api-image
         with:
-          spring-profile: ${{ steps.vars.outputs.springProfile }}
-          published-app: ./target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
+          maven-environment: ${{ steps.vars.outputs.environment }}
+          #spring-profile: ${{ steps.vars.outputs.springProfile }}
+          #published-app: ./target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
           dockerfile: ./Dockerfile   # ajuster le chemin de dockerfile
-          cmd: "java -jar /app.jar" 
+          #cmd: "java -jar /app.jar" 
           image-short-name: dev-fplarache-smartlib-catalog-repo
           #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
           #image-prefix: ""
-          image-tag: latest # Utilisation de 'latest' pour la version par défaut
+          #image-tag: latest # Utilisation de 'latest' pour la version par défaut
+          image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
-          JAVA_APP_PATH: ../../target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
+          #JAVA_APP_PATH: ../../target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar
 
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
