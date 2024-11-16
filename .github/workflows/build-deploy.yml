@@ -93,6 +93,9 @@ jobs:
       # Vérification du fichier .jar généré
       - name: List target directory contents
         run: ls -la target/
+      - name: Rename generated JAR
+        run: mv target/*.jar target/app.jar
+
 
       ###############################
       # WebAPI
