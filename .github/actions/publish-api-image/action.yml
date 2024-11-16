@@ -6,7 +6,7 @@ inputs:
     default: 'dev'
   published-app:
     description: 'Path to the built Java application (e.g., target/*.jar)'
-    default: 'target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar'
+    default: 'target/app.jar'
   dockerfile:
     description: 'Path to the Dockerfile'
     default: '../../Dockerfile'
