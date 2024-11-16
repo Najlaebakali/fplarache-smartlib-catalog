@@ -37,7 +37,7 @@ runs:
     - shell: bash
       run: |
         # Set the image name dynamically
-        export IMAGENAME=${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}
+        export IMAGENAME=774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
 
         # Build the Docker image
         docker build \
