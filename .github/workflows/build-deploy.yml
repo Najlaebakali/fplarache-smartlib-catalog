@@ -60,8 +60,8 @@ jobs:
           echo "application=${APPLICATION}" >> $GITHUB_OUTPUT
           echo "service=${SERVICE}" >> $GITHUB_OUTPUT
           if [ "${ENVIRONMENT}" = "dev" ]; then
-            echo "awsAccessKey=DEV_ADMIN_AWS_ACCESS_KEY" >> $GITHUB_OUTPUT
-            echo "awsSecretKey=DEV_ADMIN_AWS_SECRET_KEY" >> $GITHUB_OUTPUT
+            echo "awsAccessKey=${{ secrets.DEV_ADMIN_AWS_ACCESS_KEY }}" >> $GITHUB_OUTPUT
+            echo "awsSecretKey=${{ secrets.DEV_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
             echo "awsDefaultRegion=eu-west-1" >> $GITHUB_OUTPUT
             echo "springProfile=dev" >> $GITHUB_OUTPUT
           elif [ "${ENVIRONMENT}" = "prod" ]; then
