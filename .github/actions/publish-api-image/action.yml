@@ -36,11 +36,21 @@ runs:
   steps:
     - shell: bash
       run: |
-        # Set the image name dynamically
-        export IMAGENAME=${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}:${{ inputs.image-tag }}
+        # Extract input parameters
+        IMAGE_PREFIX="${{ inputs.image-prefix }}"
+        IMAGE_SHORT_NAME="${{ inputs.image-short-name }}"
+        IMAGE_TAG="${{ inputs.image-tag }}"
+        ECR_REGISTRY="${{ inputs.ecr-registry }}"
 
-        # Check and ensure the image name is valid (e.g., no leading dashes)
-        echo "Using image name: $IMAGENAME"
+        # Ensure the image name is correctly formatted
+        # Remove leading hyphen from the image prefix, if exists
+        IMAGE_PREFIX=$(echo $IMAGE_PREFIX | sed 's/^-//')
+
+        # Construct the full image name
+        IMAGENAME="${ECR_REGISTRY}/${IMAGE_PREFIX}-${IMAGE_SHORT_NAME}:${IMAGE_TAG}"
+
+        # Display the formatted image name
+        echo "Formatted image name: $IMAGENAME"
 
         # Build the Docker image
         docker build \
