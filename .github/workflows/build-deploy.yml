@@ -104,6 +104,8 @@ jobs:
       # Catalog
       ###############################
 
+      - name: List files in target directory
+        run: ls -alh target/
       # Étape 10 : Construire l'image Docker pour WebAPI
       - name: Build Docker image - WebApi
         id: publish-webapi-image
