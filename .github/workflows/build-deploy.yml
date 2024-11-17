@@ -63,12 +63,10 @@ jobs:
             echo "awsAccessKey=${{ secrets.DEV_ADMIN_AWS_ACCESS_KEY }}" >> $GITHUB_OUTPUT
             echo "awsSecretKey=${{ secrets.DEV_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
             echo "awsDefaultRegion=eu-west-1" >> $GITHUB_OUTPUT
-            #echo "springProfile=dev" >> $GITHUB_OUTPUT
           elif [ "${ENVIRONMENT}" = "prod" ]; then
             echo "awsAccessKey=PROD_ADMIN_AWS_ACCESS_KEY" >> $GITHUB_OUTPUT
             echo "awsSecretKey=PROD_ADMIN_AWS_SECRET_KEY" >> $GITHUB_OUTPUT
             echo "awsDefaultRegion=eu-west-1" >> $GITHUB_OUTPUT
-            #echo "springProfile=prod" >> $GITHUB_OUTPUT
           fi
           echo "fullServiceName=${ENVIRONMENT}-${APPLICATION}-${SERVICE}" >> $GITHUB_OUTPUT
 
@@ -88,30 +86,36 @@ jobs:
 
       # Étape 9 : Construire et empaqueter l'application Java
       - name: Build and package Java application
-        run: mvn clean package -DskipTests
+        run: |
+          mvn clean package -DskipTests
           if [ $? -ne 0 ]; then
-         echo "Maven build failed"
-         exit 1
-         fi
+            echo "Maven build failed"
+            exit 1
+          fi
+
+
 
       - name: Afficher l'emplacement du fichier JAR
         run: |
            ls -alh target/  # Vérifie l'existence de app.jar
-           test -f target/app.jar || (echo "Error: app.jar not found" && exit 1)
+           test -f target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar || (echo "Error: fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar not found" && exit 1)
+
       ###############################
       # Catalog
       ###############################
 
+      - name: List files in target directory
+        run: ls -alh target/
+        
       # Étape 10 : Construire l'image Docker pour WebAPI
       - name: Build Docker image - WebApi
         id: publish-webapi-image
         uses: ./.github/actions/publish-api-image
         with:
           maven-environment: ${{ steps.vars.outputs.environment }}
-          #spring-profile: ${{ steps.vars.outputs.springProfile }}
-          published-app: target/app.jar
-          dockerfile: Dockerfile   # ajuster le chemin de dockerfile
-          cmd: "java -jar /app.jar" 
+          context: .
+          published-app: target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar  # Corrected JAR file path
+          cmd: "java -jar /app.jar"
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
           #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
@@ -119,12 +123,20 @@ jobs:
           #image-tag: latest # Utilisation de 'latest' pour la version par défaut
           image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
-          JAVA_APP_PATH: target/app.jar
+          
+      # Step to display the image name and tag
+      - name: Display Docker image name and tag
+        run: |
+          echo "Docker image name: ${GITHUB_SHA}-repo"
+          echo "Docker image tag: ${{ github.sha }}" 
+   
 
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
         run: |
-          docker tag dev-fplarache-smartlib-catalog-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+          # Taguer l'image Docker avec le nom complet de l'ECR
+          docker tag ${GITHUB_SHA}-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+          # Pousser l'image vers ECR
           docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
 
       # Étape 12 : Déployer WebAPI sur ECS
