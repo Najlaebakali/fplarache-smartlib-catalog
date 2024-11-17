@@ -50,6 +50,9 @@ runs:
         DOCKERFILE_PATH="${{ inputs.dockerfile }}"
         JAVA_ENVIRONMENT="${{ inputs.java-environment }}"
 
+         # Debugging: Print Dockerfile path
+        echo "Dockerfile Path: $DOCKERFILE_PATH"
+        
         # Step 1: Validate inputs
         if [[ -z "$IMAGE_PREFIX" ]]; then
           echo "Error: IMAGE_PREFIX is not set or empty"
