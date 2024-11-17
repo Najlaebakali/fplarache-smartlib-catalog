@@ -159,6 +159,8 @@ jobs:
           ECS_SERVICE: ${{ steps.vars.outputs.fullServiceName }}-fgservice
           #ECS_SERVICE: ${{ steps.vars.outputs.ecsService }}
         run: |
+          echo "ECS_CLUSTER=${ECS_CLUSTER}" 
+          echo "ECS_SERVICE=${ECS_SERVICE}"
           TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
           #TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster "${ECS_CLUSTER}" --service "${ECS_SERVICE}")"
 
