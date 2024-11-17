@@ -98,7 +98,7 @@ jobs:
       - name: Afficher l'emplacement du fichier JAR
         run: |
            ls -alh target/  # Vérifie l'existence de app.jar
-           test -f target/app.jar || (echo "Error: app.jar not found" && exit 1)
+           test -f target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar || (echo "Error: fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar not found" && exit 1)
 
       ###############################
       # Catalog
