@@ -145,7 +145,11 @@ jobs:
          
 
 
-
+     # Debug Step: Print ECS Variables 
+      - name: Print ECS Variables 
+        run: | 
+         echo "ECS_CLUSTER=${{ steps.vars.outputs.fullServiceName }}-fgcluster" 
+         echo "ECS_SERVICE=${{ steps.vars.outputs.fullServiceName }}-fgservice"
 
       # Étape 12 : Déployer WebAPI sur ECS
       - name: Deploy ECS - WebApi
