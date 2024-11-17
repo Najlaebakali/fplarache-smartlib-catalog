@@ -78,6 +78,7 @@ jobs:
 
           # Configuration des noms ECS
           echo "ecsCluster=${ENVIRONMENT}-${APPLICATION}-${SERVICE}-fgcluster" >> $GITHUB_OUTPUT
+          
           echo "ecsService=${ENVIRONMENT}-${APPLICATION}-${SERVICE}-fgservice" >> $GITHUB_OUTPUT
 
 
@@ -158,8 +159,10 @@ jobs:
       # Étape 12 : Déployer WebAPI sur ECS
       - name: Deploy ECS - WebApi
         env:
-          ECS_CLUSTER: ${{ steps.vars.outputs.fullServiceName }}-fgcluster
-          ECS_SERVICE: ${{ steps.vars.outputs.fullServiceName }}-fgservice
+          #ECS_CLUSTER: ${{ steps.vars.outputs.fullServiceName }}-fgcluster
+          ECS_CLUSTER: ${{ steps.vars.outputs.ecsCluster }}
+          #ECS_SERVICE: ${{ steps.vars.outputs.fullServiceName }}-fgservice
+          ECS_SERVICE: ${{ steps.vars.outputs.ecsService }}
         run: |
           TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
           TASK_ARN="$(printf '%s' "${TASK_JSON}"|jq -r '.service.deployments[0].id')"
