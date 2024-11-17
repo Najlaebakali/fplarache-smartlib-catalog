@@ -154,18 +154,13 @@ jobs:
 
       # Étape 12 : Déployer WebAPI sur ECS
         env:
-         ECS_CLUSTER: dev-fplarache-smartlib-catalog-fgcluster
-         ECS_SERVICE: dev-fplarache-smartlib-catalog-fgservice
-         run: |
-          echo "ECS_CLUSTER=${ECS_CLUSTER}"
-          echo "ECS_SERVICE=${ECS_SERVICE}"
-          TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
-          echo "TASK_JSON=${TASK_JSON}"
+          ECS_CLUSTER: dev-fplarache-smartlib-catalog-fgcluster
+          ECS_SERVICE: dev-fplarache-smartlib-catalog-fgservice
           run: |
-          echo "ECS_CLUSTER=${ECS_CLUSTER}" 
-          echo "ECS_SERVICE=${ECS_SERVICE}"
-          TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
-          #TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster "${ECS_CLUSTER}" --service "${ECS_SERVICE}")"
-
-          TASK_ARN="$(printf '%s' "${TASK_JSON}"|jq -r '.service.deployments[0].id')"
-          echo "deployment-arn=$TASK_ARN" >> $GITHUB_OUTPUT
+           echo "ECS_CLUSTER=${ECS_CLUSTER}"
+           echo "ECS_SERVICE=${ECS_SERVICE}"
+           TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
+           echo "TASK_JSON=${TASK_JSON}"
+           
+           TASK_ARN="$(printf '%s' "${TASK_JSON}"|jq -r '.service.deployments[0].id')"
+           echo "deployment-arn=$TASK_ARN" >> $GITHUB_OUTPUT
