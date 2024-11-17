@@ -106,10 +106,11 @@ jobs:
 
       - name: List files in target directory
         run: ls -alh target/
+        
       # Étape 10 : Construire l'image Docker pour WebAPI
       - name: Build Docker image - WebApi
         id: publish-webapi-image
-        uses: docker/build-push-action@v2
+        uses: ./.github/actions/publish-api-image
         with:
           maven-environment: ${{ steps.vars.outputs.environment }}
           context: .
@@ -117,6 +118,9 @@ jobs:
           cmd: "java -jar /app.jar"
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
+          #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
+          #image-prefix: ""
+          #image-tag: latest # Utilisation de 'latest' pour la version par défaut
           image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
           
