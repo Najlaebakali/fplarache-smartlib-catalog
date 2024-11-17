@@ -86,11 +86,13 @@ jobs:
 
       # Étape 9 : Construire et empaqueter l'application Java
       - name: Build and package Java application
-        run: mvn clean package -DskipTests
+        run: |
+          mvn clean package -DskipTests
           if [ $? -ne 0 ]; then
-          echo "Maven build failed"
-          exit 1
+            echo "Maven build failed"
+            exit 1
           fi
+
 
 
       - name: Afficher l'emplacement du fichier JAR
