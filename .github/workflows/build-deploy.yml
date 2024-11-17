@@ -69,6 +69,7 @@ jobs:
           echo "awsDefaultRegion=eu-north-1" >> $GITHUB_OUTPUT 
          fi 
          echo "fullServiceName=${ENVIRONMENT}-${APPLICATION}-${SERVICE}" >> $GITHUB_OUTPUT 
+         echo "fullServiceName=${fullServiceName}"
 
 
       
