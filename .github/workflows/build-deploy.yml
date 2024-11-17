@@ -117,8 +117,9 @@ jobs:
           cmd: "java -jar /app.jar" 
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
-          image-tag: latest
+          image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
+          
       # Step to display the image name and tag
       - name: Display Docker image name and tag
         run: |
