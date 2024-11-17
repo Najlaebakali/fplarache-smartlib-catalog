@@ -21,12 +21,12 @@ inputs:
     default: 'latest'
   ecr-registry:
     description: 'Amazon ECR registry URL (e.g., 123456789012.dkr.ecr.us-west-1.amazonaws.com)'
-    default: '774305596814.dkr.ecr.eu-north-1.amazonaws.com'
+    default: '774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo'
 
 outputs:
   image-uri:
     description: 'The URI of the pushed image'
-    value: ${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}:${{ inputs.image-tag }}
+    value: ${{ inputs.ecr-registry }}/${{ inputs.image-short-name }}:${{ inputs.image-tag }}
 
 runs:
   using: "composite"
