@@ -124,7 +124,16 @@ jobs:
         run: |
           echo "Docker image name: ${GITHUB_SHA}-repo"
           echo "Docker image tag: ${{ github.sha }}" 
-          
+        # Étape 10.2 : Retaguer l'image construite si nécessaire
+      - name: Tag Docker image
+        run: |
+          IMAGE_ID=$(docker images --filter "dangling=true" --format "{{.ID}}" | head -n 1)
+          if [ -n "$IMAGE_ID" ]; then
+            docker tag $IMAGE_ID dev-fplarache-smartlib-catalog-repo:latest
+          else
+            echo "No dangling image found. Build step might have failed."
+            exit 1
+          fi
 
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
