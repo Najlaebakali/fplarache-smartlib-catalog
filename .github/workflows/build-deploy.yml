@@ -137,7 +137,7 @@ jobs:
          # Taguer l'image Docker avec le nom complet du référentiel ECR
          docker tag ${GITHUB_SHA}-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
          # Pousser l'image vers ECR
-         docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+         docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/fplarache-smartlib-catalog-repo:latest
 
 
 
