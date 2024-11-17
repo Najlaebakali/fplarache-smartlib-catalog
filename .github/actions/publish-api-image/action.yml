@@ -6,7 +6,7 @@ inputs:
     default: 'dev'
   dockerfile:
     description: 'Path to the Dockerfile'
-    default: '../../Dockerfile'
+    default: 'Dockerfile'
   cmd:
     description: 'Command to run the Java app (e.g., java -jar app.jar)'
     default: 'java -jar /app.jar'  # This may need to change depending on where you copy the JAR in Dockerfile
