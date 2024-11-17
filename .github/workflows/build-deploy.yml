@@ -153,13 +153,15 @@ jobs:
          echo "ECS_SERVICE=${{ steps.vars.outputs.fullServiceName }}-fgservice"
 
       # Étape 12 : Déployer WebAPI sur ECS
-      - name: Deploy ECS - WebApi
         env:
-          ECS_CLUSTER: ${{ steps.vars.outputs.fullServiceName }}-fgcluster
-          #ECS_CLUSTER: ${{ steps.vars.outputs.ecsCluster }}
-          ECS_SERVICE: ${{ steps.vars.outputs.fullServiceName }}-fgservice
-          #ECS_SERVICE: ${{ steps.vars.outputs.ecsService }}
-        run: |
+         ECS_CLUSTER: dev-fplarache-smartlib-catalog-fgcluster
+         ECS_SERVICE: dev-fplarache-smartlib-catalog-fgservice
+         run: |
+          echo "ECS_CLUSTER=${ECS_CLUSTER}"
+          echo "ECS_SERVICE=${ECS_SERVICE}"
+          TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
+          echo "TASK_JSON=${TASK_JSON}"
+          run: |
           echo "ECS_CLUSTER=${ECS_CLUSTER}" 
           echo "ECS_SERVICE=${ECS_SERVICE}"
           TASK_JSON="$(aws ecs update-service --force-new-deployment --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE})"
