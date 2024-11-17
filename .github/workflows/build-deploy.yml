@@ -119,6 +119,9 @@ jobs:
           image-short-name: repo
           image-tag: ${{ github.sha }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
+          
+      - name: Vérifier les images Docker disponibles
+        run: docker images
 
 
       # Étape 11 : Pusher l'image Docker vers ECR
