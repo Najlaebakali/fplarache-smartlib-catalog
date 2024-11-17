@@ -4,9 +4,6 @@ inputs:
   java-environment:
     description: 'Java environment (e.g., dev, prod)'
     default: 'dev'
-  published-app:
-    description: 'Path to the built Java application (e.g., target/*.jar)'
-    default: 'target/app.jar'
   dockerfile:
     description: 'Path to the Dockerfile'
     default: '../../Dockerfile'
@@ -29,11 +26,20 @@ inputs:
 outputs:
   image-uri:
     description: 'The URI of the pushed image'
-    value: ${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}:latest
+    value: ${{ inputs.ecr-registry }}/${{ inputs.image-prefix }}-${{ inputs.image-short-name }}:${{ inputs.image-tag }}
 
 runs:
   using: "composite"
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx (optional, if using multi-platform builds)
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
     - shell: bash
       run: |
         # Extract input parameters
@@ -41,7 +47,6 @@ runs:
         IMAGE_SHORT_NAME="${{ inputs.image-short-name }}"
         IMAGE_TAG="${{ inputs.image-tag }}"
         ECR_REGISTRY="${{ inputs.ecr-registry }}"
-        JAVA_APP_PATH="${{ inputs.published-app }}"
         DOCKERFILE_PATH="${{ inputs.dockerfile }}"
         JAVA_ENVIRONMENT="${{ inputs.java-environment }}"
 
@@ -62,17 +67,12 @@ runs:
           echo "Error: ECR_REGISTRY is not set or empty"
           exit 1
         fi
-        if [[ -z "$JAVA_APP_PATH" || ! -f "$JAVA_APP_PATH" ]]; then
-          echo "Error: JAVA_APP_PATH is not set or does not point to a valid file"
-          exit 1
-        fi
         if [[ -z "$DOCKERFILE_PATH" || ! -f "$DOCKERFILE_PATH" ]]; then
           echo "Error: DOCKERFILE_PATH is not set or does not point to a valid file"
           exit 1
         fi
 
         # Step 2: Ensure the image name is correctly formatted
-        # Remove leading hyphen from the image prefix, if exists
         IMAGE_PREFIX=$(echo $IMAGE_PREFIX | sed 's/^-//')
 
         # Step 3: Construct the full image name
@@ -81,10 +81,8 @@ runs:
         # Step 4: Display the formatted image name
         echo "Formatted image name: $IMAGENAME"
 
-        # Step 5: Build the Docker image
+        # Step 5: Build the Docker image (without passing JAVA_APP_PATH)
         docker build \
-          --build-arg JAVA_API_PATH_ARG=$JAVA_APP_PATH \
-          --build-arg JAVA_ENVIRONMENT_ARG=$JAVA_ENVIRONMENT \
           -f $DOCKERFILE_PATH \
           -t $IMAGENAME .
 
