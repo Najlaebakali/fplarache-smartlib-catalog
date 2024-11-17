@@ -70,11 +70,6 @@ jobs:
           fi
           echo "fullServiceName=${ENVIRONMENT}-${APPLICATION}-${SERVICE}" >> $GITHUB_OUTPUT
 
-          ##
-          ENVIRONMENT="${{ steps.split_pre.outputs._1 }}"
-          APPLICATION="smartlib-catalog"
-          SERVICE="catalog-service"
-
           if [[ -z "$ENVIRONMENT" || -z "$APPLICATION" || -z "$SERVICE" ]]; then
             echo "Error: One of the environment variables is missing."
             exit 1
