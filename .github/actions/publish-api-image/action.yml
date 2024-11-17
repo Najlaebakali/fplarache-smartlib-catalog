@@ -9,7 +9,7 @@ inputs:
     default: '../../Dockerfile'
   cmd:
     description: 'Command to run the Java app (e.g., java -jar app.jar)'
-    default: 'java -jar /app.jar'
+    default: 'java -jar /app.jar'  # This may need to change depending on where you copy the JAR in Dockerfile
   image-short-name:
     description: 'Short name for the Docker image'
     default: 'fplarache-smartlib-catalog'
@@ -81,7 +81,7 @@ runs:
         # Step 4: Display the formatted image name
         echo "Formatted image name: $IMAGENAME"
 
-        # Step 5: Build the Docker image (without passing JAVA_APP_PATH)
+        # Step 5: Build the Docker image
         docker build \
           -f $DOCKERFILE_PATH \
           -t $IMAGENAME .
