@@ -1,0 +1,25 @@
+type Livre {
+    id: ID!
+    titre: String
+    auteur: String
+    genre: String
+    description: String
+    datePublication: String
+    isbn: String
+    status: String
+}
+
+type Query {
+    getAllLivres: [Livre]
+    getLivreById(id: ID!): Livre
+    searchByTitle(title: String!): [Livre]
+    filterByGenreAndAuthor(genre: String, author: String): [Livre]
+    getLivresByStatus(status: String!): [Livre]
+
+}
+
+type Mutation {
+    saveLivre(titre: String!, auteur: String!, genre: String, description: String, datePublication: String, isbn: String, status: String): Livre
+    updateLivre(id: ID!, titre: String, auteur: String, genre: String, description: String, datePublication: String, isbn: String, status: String): Livre
+    deleteLivre(id: ID!): String
+}
