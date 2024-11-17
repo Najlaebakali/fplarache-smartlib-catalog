@@ -117,7 +117,7 @@ jobs:
           published-app: target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar  # Corrected JAR file path
           cmd: "java -jar /app.jar"
           main-class: "dev-fplarache-smartlib-catalog"
-          image-short-name: repo
+          image-short-name: dev-fplarache-smartlib-catalog-repo
           #image-prefix: ${{ steps.vars.outputs.fullServiceName }}
           #image-prefix: ""
           #image-tag: latest # Utilisation de 'latest' pour la version par défaut
