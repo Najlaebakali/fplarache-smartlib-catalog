@@ -127,7 +127,7 @@ jobs:
       # Step to display the image name and tag
       - name: Display Docker image name and tag
         run: |
-          echo "Docker image name: ${GITHUB_SHA}-repo"
+          echo "Docker image name: dev-fplarache-smartlib-catalog-repo"
           echo "Docker image tag: latest" 
    
 
