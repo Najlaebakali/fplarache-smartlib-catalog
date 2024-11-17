@@ -48,33 +48,22 @@ jobs:
           msg: ${{ steps.extract_branch.outputs.branch }}
           separator: "-"
 
-          # Étape 6 : Définir les variables selon l'environnement
+       # Étape 6 : Définir les variables d'environnement pour AWS et ECS
       - name: Set vars
         id: vars
-        env:
-          ENVIRONMENT: ${{ steps.split_pre.outputs._1 }}
-          APPLICATION: smartlib-catalog
-          SERVICE: catalog-service
         run: |
-          echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
-          echo "application=${APPLICATION}" >> $GITHUB_OUTPUT
-          echo "service=${SERVICE}" >> $GITHUB_OUTPUT
-          if [ "${ENVIRONMENT}" = "dev" ]; then
-            echo "awsAccessKey=${{ secrets.DEV_ADMIN_AWS_ACCESS_KEY }}" >> $GITHUB_OUTPUT
-            echo "awsSecretKey=${{ secrets.DEV_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
-            echo "awsDefaultRegion=eu-north-1" >> $GITHUB_OUTPUT
-          elif [ "${ENVIRONMENT}" = "prod" ]; then
-            echo "awsAccessKey=PROD_ADMIN_AWS_ACCESS_KEY" >> $GITHUB_OUTPUT
-            echo "awsSecretKey=PROD_ADMIN_AWS_SECRET_KEY" >> $GITHUB_OUTPUT
-            echo "awsDefaultRegion=eu-north-1" >> $GITHUB_OUTPUT
-          fi
-          echo "fullServiceName=${ENVIRONMENT}-${APPLICATION}-${SERVICE}" >> $GITHUB_OUTPUT
+          # Définition des variables nécessaires pour le déploiement
+          ENVIRONMENT="${{ steps.split_pre.outputs._1 }}"  # Récupération de l'environnement (dev ou prod)
+          APPLICATION="smartlib-catalog"                  # Nom de l'application
+          SERVICE="catalog-service"                       # Nom du service
 
+          # Vérification que les variables sont définies
           if [[ -z "$ENVIRONMENT" || -z "$APPLICATION" || -z "$SERVICE" ]]; then
             echo "Error: One of the environment variables is missing."
             exit 1
           fi
 
+          # Configuration des clés AWS selon l'environnement
           if [ "$ENVIRONMENT" = "dev" ]; then
             echo "awsAccessKey=${{ secrets.DEV_ADMIN_AWS_ACCESS_KEY }}" >> $GITHUB_OUTPUT
             echo "awsSecretKey=${{ secrets.DEV_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
@@ -83,9 +72,9 @@ jobs:
             echo "awsSecretKey=${{ secrets.PROD_ADMIN_AWS_SECRET_KEY }}" >> $GITHUB_OUTPUT
           fi
 
+          # Configuration des noms ECS
           echo "ecsCluster=${ENVIRONMENT}-${APPLICATION}-${SERVICE}-fgcluster" >> $GITHUB_OUTPUT
           echo "ecsService=${ENVIRONMENT}-${APPLICATION}-${SERVICE}-fgservice" >> $GITHUB_OUTPUT
-
 
 
       # Étape 7 : Configurer les credentials AWS
