@@ -134,10 +134,11 @@ jobs:
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
         run: |
-          # Taguer l'image Docker avec le nom complet de l'ECR
-          docker tag ${GITHUB_SHA}-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
-          # Pousser l'image vers ECR
-          docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+         # Taguer l'image Docker avec le nom complet de l'ECR
+         docker tag ${GITHUB_SHA}-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+         # Pousser l'image vers ECR
+         docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+
 
       # Étape 12 : Déployer WebAPI sur ECS
       - name: Deploy ECS - WebApi
