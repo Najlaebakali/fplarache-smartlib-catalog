@@ -111,7 +111,7 @@ jobs:
         with:
           maven-environment: ${{ steps.vars.outputs.environment }}
           published-app: target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar  # Corrected JAR file path
-          dockerfile: ../../Dockerfile # ajuster le chemin de dockerfile
+          dockerfile: Dockerfile # ajuster le chemin de dockerfile
           cmd: "java -jar /app.jar" 
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
