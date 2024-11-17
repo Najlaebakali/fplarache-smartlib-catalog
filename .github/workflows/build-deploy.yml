@@ -114,7 +114,7 @@ jobs:
           maven-environment: ${{ steps.vars.outputs.environment }}
           context: .
           published-app: target/fplarache-smartlib-catalog-0.0.1-SNAPSHOT.jar  # Corrected JAR file path
-          cmd: "java -jar /app.jar" 
+          cmd: "java -jar /app.jar"
           main-class: "dev-fplarache-smartlib-catalog"
           image-short-name: repo
           image-tag: ${{ github.sha }}
@@ -130,7 +130,9 @@ jobs:
       # Étape 11 : Pusher l'image Docker vers ECR
       - name: Push Docker image to ECR
         run: |
+          # Taguer l'image Docker avec le nom complet de l'ECR
           docker tag ${GITHUB_SHA}-repo:latest 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
+          # Pousser l'image vers ECR
           docker push 774305596814.dkr.ecr.eu-north-1.amazonaws.com/dev-fplarache-smartlib-catalog-repo:latest
 
       # Étape 12 : Déployer WebAPI sur ECS
